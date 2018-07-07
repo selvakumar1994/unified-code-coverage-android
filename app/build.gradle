@@ -1,27 +1,71 @@
-buildscript {
-    ext.jacocoVersion = '0.8.1'
+apply plugin: 'com.android.application'
+apply plugin: 'jacoco'
+apply plugin: 'org.sonarqube'
+jacoco {
+    toolVersion = "$jacocoVersion"
+}
 
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+    ])
+}
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        applicationId 'net.rafaeltoledo.coverage'
+        minSdkVersion 15
+        targetSdkVersion 27
+        versionCode 1
+        versionName '1.0'
+
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
+    }
+
+    buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
-        classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.5"
+
+    testOptions {
+        execution 'ANDROID_TEST_ORCHESTRATOR'
+        animationsDisabled true
+
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-    }
-}
+dependencies {
+    implementation 'com.android.support:appcompat-v7:27.1.0'
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2-alpha1'
+    androidTestUtil 'com.android.support.test:orchestrator:1.0.2-alpha1'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:3.8'
 }
