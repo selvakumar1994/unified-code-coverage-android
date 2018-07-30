@@ -64,6 +64,7 @@ android {
 dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.0'
 
+//uses
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2-alpha1'
     androidTestUtil 'com.android.support.test:orchestrator:1.0.2-alpha1'
 
