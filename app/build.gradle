@@ -56,7 +56,7 @@ android {
         animationsDisabled true
 
         unitTests {
-            includeAndroidResources = true #hjdigsdfg
+            includeAndroidResources = true 
         }
     }
 }
