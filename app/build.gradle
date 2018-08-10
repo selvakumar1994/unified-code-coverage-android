@@ -13,7 +13,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 
     reports {
         xml.enabled = true
-        html.enabled = true  
+        html.enabled = true
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
@@ -35,28 +35,51 @@ android {
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
-        versionName '1.0'
+        versionName '1.0'  
 
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
+
 
     buildTypes {
         debug {
             testCoverageEnabled true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            testCoverageEnabled true
         }
     }
+
+  // buildTypes {
+//        debug {
+//            testCoverageEnabled true
+//        }
+
+
+//            signingConfigs {
+//                debug {
+//                    storeFile file("my-keystore-file.jks")
+//                    storePassword "my-password"
+//                    keyAlias "my-alias"
+//                    keyPassword "my-password"
+//                }
+//            }
+//
+//        release {
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            testCoverageEnabled true
+//        }
+//    }
 
     testOptions {
         execution 'ANDROID_TEST_ORCHESTRATOR'
         animationsDisabled true
 
         unitTests {
-            includeAndroidResources = true 
+            includeAndroidResources = true
         }
     }
 }
@@ -64,7 +87,6 @@ android {
 dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.0'
 
-//uses for rst
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2-alpha1'
     androidTestUtil 'com.android.support.test:orchestrator:1.0.2-alpha1'
 

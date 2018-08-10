@@ -1,4 +1,4 @@
-package net.rafaeltoledo.coverage;
+package net.rafaeltoledo.testcoverage;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

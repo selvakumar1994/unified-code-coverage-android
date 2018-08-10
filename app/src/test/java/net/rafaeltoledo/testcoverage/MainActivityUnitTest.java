@@ -1,11 +1,7 @@
-package net.rafaeltoledo.coverage;
-
-import android.view.View;
-import android.widget.Button;
+package net.rafaeltoledo.testcoverage;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import static org.hamcrest.MatcherAssert.assertThat;
